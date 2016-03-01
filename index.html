@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+    <title>Phaser - Making your first game, part 9</title>
+	<script type="text/javascript" src="js/phaser.min.js"></script>
+	<script type="text/javascript" src="js/phaser.min.js"></script>
+    <script type="text/javascript" src="js/Character.js"></script>
+    <script type="text/javascript" src="js/Case.js"></script>
+    <script type="text/javascript" src="js/Board.js"></script>
+
+    <style type="text/css">
+        body {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+<script type="text/javascript">
+
+var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
+
+function preload() {
+
+    game.load.image('sky', 'assets/sky.png');
+//    game.load.image('star', 'assets/star.png');
+    game.load.spritesheet('dude', 'assets/dude.png', 32, 48);
+    game.load.spritesheet('tile1', 'assets/tile.png', 128, 128);
+}
+
+var directions = {
+    LEFT: 1,
+    UP:2,
+    RIGHT:3,
+    DOWN:4,
+};
+
+var states = {
+    MOVING: 1,
+    IDLE: 2,
+    DEAD: 3,
+    EXHAUST: 4,
+};
+
+var player;
+var map;
+var scoreText;
+var cursors;
+var fondEcran;
+var tw;
+
+function create() {
+    fondEcran = game.add.sprite(0, 0, 'sky');
+    fondEcran.inputEnabled = true;
+    map = new Board(8,8);
+    var posPlayerX = map.tab[0][0].getX();
+    var posPlayerY = map.tab[0][0].getY();
+    player = new Character(3, game.add.sprite(posPlayerX, posPlayerY, 'dude'), 0, 0, 600);
+    player.sprite.animations.add('left', [0, 1, 2, 3], 10, true);
+    player.sprite.animations.add('right', [5, 6, 7, 8], 10, true);
+    cursors = game.input.keyboard.createCursorKeys();
+    someoneSelected = false;
+}
+
+function update() {
+
+
+    if (player.state == states.IDLE){
+        player.sprite.animations.stop();
+        player.sprite.frame = 4;
+    }
+
+    if (cursors.left.isDown)
+    {
+        player.movement(directions.LEFT);
+        player.sprite.animations.play('left');
+    }
+    else if (cursors.right.isDown)
+    {
+        player.movement(directions.RIGHT);
+
+        player.sprite.animations.play('right');
+    }    else if (cursors.up.isDown)
+    {
+         player.movement(directions.UP);
+
+        player.sprite.animations.play('right');
+    }    else if (cursors.down.isDown)
+    {
+        player.movement(directions.DOWN);
+        player.sprite.animations.play('right');
+    }
+}
+
+
+
+
+
+
+
+
+
+
+</script>
+
+</body>
+</html>
